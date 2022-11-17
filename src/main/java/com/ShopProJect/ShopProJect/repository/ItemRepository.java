@@ -2,6 +2,8 @@ package com.ShopProJect.ShopProJect.repository;
 
 import com.ShopProJect.ShopProJect.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,4 +20,11 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     List<Item> findByPriceLessThanOrderByPriceDesc(Integer price);
     //가격을 내림차순으로 조회
     //Asc는 오름차순 Desc는 내림차순!
+    @Query("SELECT i FROM Item i WHERE i.itemDetail like %:itemDetail% order by i.price desc ")
+    //위에부분을 보면 테이블 Item을 i라는 이름으로 대신써주는 모습!
+    List<Item> findItemDetail(@Param("itemDetail") String itemDetail);
+    //첫번쨰 @Param부분에는 Like뒤에 들어  올녀석을 변수로 지정해주는 모습!
+    //변수를 넣을떄?는 :을 넣어서 작성하면됨
+    @Query(value="SELECT * FROM Item i WHERE i.item_Detail LIKE %:itemDetail% order by i.price desc ",nativeQuery = true)
+    List<Item> findItemDetailByNative(@Param("itemDetail") String itemDetail);
 }
