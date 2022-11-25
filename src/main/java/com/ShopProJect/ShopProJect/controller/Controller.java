@@ -70,9 +70,13 @@ public class Controller {
     }
 
     @GetMapping(value = "/ex06")
-    public String thymeleafExample05(Model model,String param1,String param2) {
+    public String thymeleafExample06(Model model,String param1,String param2) {
         model.addAttribute("param1",param1);
         model.addAttribute("param2",param2);
         return "thymeleafEx/thymeleafEx06";
+    }
+    @GetMapping(value = "ex07")
+    public String thymeleafExample06(){
+        return "thymeleafEx/thymeleafEx07";
     }
 }
