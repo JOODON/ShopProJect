@@ -7,6 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class MemberServiceTest {
+    //UserDetailsService를 구현합니다.
     @Autowired
     MemberService memberService;
     @Autowired
