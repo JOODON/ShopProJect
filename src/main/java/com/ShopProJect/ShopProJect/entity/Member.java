@@ -42,8 +42,9 @@ public class Member {
         String password=passwordEncoder.encode(memberFromDto.getPassword());
         //이쪽으로 넘겨서 비밀번호를 암호화 시켜주는 부분!
         member.setPassword(password);
-        member.setRole(Role.USER);
+        member.setRole(Role.ADMIN);
         return member;
     }
+
 
 }
