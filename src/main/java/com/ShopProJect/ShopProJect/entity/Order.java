@@ -20,10 +20,10 @@ public class Order {
     @JoinColumn(name="member_id")
     private Member member;
 
-    private LocalDateTime orderDate;
+    private LocalDateTime orderDate;//주문일
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus;//주문 상태
 
     private LocalDateTime regTime;
 
