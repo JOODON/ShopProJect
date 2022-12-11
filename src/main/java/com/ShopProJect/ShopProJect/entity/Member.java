@@ -45,6 +45,4 @@ public class Member {
         member.setRole(Role.ADMIN);
         return member;
     }
-
-
 }
