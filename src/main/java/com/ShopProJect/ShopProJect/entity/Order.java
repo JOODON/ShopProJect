@@ -29,9 +29,10 @@ public class Order {
     private OrderStatus orderStatus;//주문 상태
 
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
     //주문 상품 엔티티랑 1대다 매핑 외래키가 order_item 테이블에 있으므로 연관관계 주인은 orderItem
     //부모속성 엔티티의 영속성 상태변화를 자식에게 모두 전이하는 all을 사용함
+    //고아객체 제거를 하기위해서 orphanRemoval = true 를 붙혀줌
 
     private List<OrderItem> orderItems=new ArrayList<>();
     //하나의 주문이 여러상품을가지고 있으므로 List자료형을 가지고 매핑해줌

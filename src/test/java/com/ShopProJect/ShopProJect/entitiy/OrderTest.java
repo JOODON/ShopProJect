@@ -2,9 +2,11 @@ package com.ShopProJect.ShopProJect.entitiy;
 
 import com.ShopProJect.ShopProJect.constant.ItemSellStatus;
 import com.ShopProJect.ShopProJect.entity.Item;
+import com.ShopProJect.ShopProJect.entity.Member;
 import com.ShopProJect.ShopProJect.entity.Order;
 import com.ShopProJect.ShopProJect.entity.OrderItem;
 import com.ShopProJect.ShopProJect.repository.ItemRepository;
+import com.ShopProJect.ShopProJect.repository.MemberRepository;
 import com.ShopProJect.ShopProJect.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,15 +27,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class OrderTest {
     @Autowired
     OrderRepository orderRepository;
-    
+
     @Autowired
     ItemRepository itemRepository;
-    
+
     @PersistenceContext
     EntityManager em;
-    
-    public Item createItem(){
-        Item item=new Item();
+
+    public Item createItem() {
+        Item item = new Item();
         item.setItemNm("테스트 상품");
         item.setPrice(10000);
         item.setItemDetail("상세설명");
@@ -43,15 +45,16 @@ public class OrderTest {
         item.setUpdateTime(LocalDateTime.now());
         return item;
     }
+
     @Test
     @DisplayName("영속성 전이 테스트")
-    public void cascadeTest(){
-        Order order=new Order();
+    public void cascadeTest() {
+        Order order = new Order();
 
-        for(int i=0; i<3 ;i++){
-            Item item=this.createItem();
+        for (int i = 0; i < 3; i++) {
+            Item item = this.createItem();
             itemRepository.save(item);
-            OrderItem orderItem=new OrderItem();
+            OrderItem orderItem = new OrderItem();
             orderItem.setItem(item);
             orderItem.setCount(10);
             orderItem.setOrderPrice(1000);
@@ -63,8 +66,40 @@ public class OrderTest {
 
         em.clear();//영속성 컨텍스트의 상태를 초기화해줌
 
-        Order savedOrder=orderRepository.findById(order.getId())
+        Order savedOrder = orderRepository.findById(order.getId())
                 .orElseThrow(EntityNotFoundException::new);
-        assertEquals(3,savedOrder.getOrderItems().size());
+        assertEquals(3, savedOrder.getOrderItems().size());
+    }
+
+    @Autowired
+    MemberRepository memberRepository;
+
+    public Order crateOrder() {
+        Order order = new Order();
+
+        for (int i = 0; i < 3; i++) {
+            Item item = this.createItem();
+            itemRepository.save(item);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setItem(item);
+            orderItem.setCount(10);
+            orderItem.setOrderPrice(1000);
+            orderItem.setOrder(order);
+            order.getOrderItems().add(orderItem);
+        }
+        Member member = new Member();
+        memberRepository.save(member);
+
+        order.setMember(member);
+        orderRepository.save(order);
+        return order;
+    }
+    @Test
+    @DisplayName("고아객체 제거 테스트")
+    public void orphanRemovalTest(){
+        Order order=this.crateOrder();
+        order.getOrderItems().remove(0);//Order엔티티에서 관리하고있는 리스트의 0번째 인덱스 요소를 제거함
+        em.flush();
+
     }
 }
