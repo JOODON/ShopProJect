@@ -1,10 +1,7 @@
 package com.ShopProJect.ShopProJect.entitiy;
 
 import com.ShopProJect.ShopProJect.constant.ItemSellStatus;
-import com.ShopProJect.ShopProJect.entity.Item;
-import com.ShopProJect.ShopProJect.entity.Member;
-import com.ShopProJect.ShopProJect.entity.Order;
-import com.ShopProJect.ShopProJect.entity.OrderItem;
+import com.ShopProJect.ShopProJect.entity.*;
 import com.ShopProJect.ShopProJect.repository.ItemRepository;
 import com.ShopProJect.ShopProJect.repository.MemberRepository;
 import com.ShopProJect.ShopProJect.repository.OrderRepository;
@@ -15,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
@@ -31,6 +29,8 @@ public class OrderTest {
     @Autowired
     ItemRepository itemRepository;
 
+    @Autowired
+    OrderItemRepository orderItemRepository;
     @PersistenceContext
     EntityManager em;
 
@@ -101,5 +101,22 @@ public class OrderTest {
         order.getOrderItems().remove(0);//Order엔티티에서 관리하고있는 리스트의 0번째 인덱스 요소를 제거함
         em.flush();
 
+    }
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest(){
+        Order order=this.crateOrder();
+        //기존에 만들었던 주문 생성 메소드로 값을 받아옴
+        Long orderItemId=order.getOrderItems().get(0).getId();
+
+        em.flush();
+        em.clear();
+
+        OrderItem orderItem=orderItemRepository.findById(orderItemId).orElseThrow(EntityExistsException::new);
+        //orderItem을 데이터베아스에서 조회함
+        System.out.println("Order Class:  "+orderItem.getOrder().getClass());
+        System.out.println("=====================================");
+        orderItem.getOrder().getOrderDate();
+        System.out.println("=====================================");
     }
 }
