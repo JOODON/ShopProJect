@@ -19,4 +19,5 @@ public class AuditorAwareImpi implements AuditorAware<String> {
         }
         return Optional.of(userId);
     }
+    //1월까지 쇼핑몰 사이트 다 완성시키기
 }
