@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-public class OrderItem {
+public class OrderItem extends BaseTimeEntity{
 
     @Id @GeneratedValue//기본키 매핑
     @Column(name = "order_item_id")
@@ -29,9 +29,9 @@ public class OrderItem {
 
     private int count;
 
-    private LocalDateTime localDateTime;
+//    private LocalDateTime localDateTime;
 
-    private LocalDateTime updateTime;
+//    private LocalDateTime updateTime;
 
 
 }
