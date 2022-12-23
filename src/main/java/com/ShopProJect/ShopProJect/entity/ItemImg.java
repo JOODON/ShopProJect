@@ -28,10 +28,13 @@ public class ItemImg extends BaseTimeEntity{
     @JoinColumn(name = "item_id")
     private Item item;
 
+
     public ItemImg(String imgName, String oriImgName, String imgUrl) {
         this.imgName = imgName;
         this.oriImgName = oriImgName;
         this.imgUrl = imgUrl;
     }
+
+
     //파리미터로 넘겨서 정보이미지를 업데이트 하는 생성자 생성
 }
